@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>diapo2</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>Regresion2</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7847,8 +7847,8 @@ a.anchor-link {
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <div class="content-box">
-<p>El dataset <b>fp.csv</b> contiene métricas de proyectos de software basadas en <b>Puntos Función</b>. La variable objetivo es <b>PointsAjust</b>, que representa el esfuerzo estimado (o tamaño funcional ajustado).</p>
-<p>Se eliminaron las columnas no predictoras: <code>id</code>, <code>Project</code>, <code>YearEnd</code>, <code>Language</code>. Las variables predictoras restantes son características numéricas (continuas o discretas) relacionadas con la complejidad del software.</p>
+<p>El dataset <b>fp.csv</b> contiene métricas de proyectos de software basadas en <b>Puntos Función</b>. La variable objetivo es <b>Effort</b>, que representa el esfuerzo estimado (o tamaño funcional ajustado).</p>
+<p>Se eliminaron las columnas no predictoras: <code>id</code>, <code>Project</code>, <code>YearEnd</code>. Las variables predictoras restantes son características numéricas (continuas o discretas) relacionadas con la complejidad del software.</p>
 </div>
 <div style="display: flex; gap: 20px; justify-content: space-between;">
 <div class="metric-card" style="flex: 1; border-top: 5px solid #27ae60;">
@@ -7890,6 +7890,9 @@ Eliminación de columnas no predictoras y detección de outliers por IQR.
 <b style="color:#8e44ad;">3. Selección de características por correlación</b><br/>
 Método del codo sobre correlación absoluta con el target.
 </div>
+<div style="background:#ffffff;border:2px solid #8e44ad;border-radius:10px;padding:15px;margin:10px auto;width:75%;box-shadow:0 4px 8px rgba(0,0,0,0.08);">
+<b style="color:#8e44ad;">  Selección de características mediante árbol de regresión para estimar la importancia de cada variable</b><br/>
+</div>
 <div style="font-size:1.6em;color:#bdc3c7;">↓</div>
 <div style="background:#ffffff;border:2px solid #27ae60;border-radius:10px;padding:15px;margin:10px auto;width:75%;box-shadow:0 4px 8px rgba(0,0,0,0.08);">
 <b style="color:#27ae60;">4. Entrenamiento y evaluación</b><br/>
@@ -7908,7 +7911,7 @@ Comparativa con todas las características vs. solo las seleccionadas.
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="4.-Selecci%C3%B3n-de-Caracter%C3%ADsticas-por-Correlaci%C3%B3n-de-Pearson">4. Selección de Características por Correlación de Pearson<a class="anchor-link" href="#4.-Selecci%C3%B3n-de-Caracter%C3%ADsticas-por-Correlaci%C3%B3n-de-Pearson">¶</a></h2><div class="content-box">
-<p>Se calculó la correlación absoluta de cada predictor con <b>PointsAjust</b> usando el conjunto de entrenamiento escalado. Aplicando el <b>método del codo</b> (máxima caída entre correlaciones consecutivas), se determinó el número óptimo de características a retener.</p>
+<p>Se calculó la correlación absoluta de cada predictor con <b>Effort</b> usando el conjunto de entrenamiento escalado. Aplicando el <b>método del codo</b> (máxima caída entre correlaciones consecutivas), se determinó el número óptimo de características a retener.</p>
 </div>
 <div style="background: #f8f9fa; border-left: 4px solid #f39c12; padding: 15px; text-align: left; font-size: 1.05em; color: #2c3e50; margin-top: 10px; border-radius: 6px;">
 <b>Interpretación:</b> El punto de corte se sitúa en la mayor caída de la magnitud de correlación. Las características seleccionadas son aquellas con mayor relación lineal con la variable de esfuerzo.
@@ -7916,6 +7919,27 @@ Comparativa con todas las características vs. solo las seleccionadas.
 <div style="text-align: center;">
 <img alt="Diagrama de selección de características" src="imagen.png" style="width: 80%; max-width: 600px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"/>
 <p><i>Figura: Gráfica de correlaciones con punto de corte.</i></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6d5f64ff">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="4.-Selecci%C3%B3n-de-Caracter%C3%ADsticas-por-%C3%81rbol-de-Regresi%C3%B3n">4. Selección de Características por Árbol de Regresión<a class="anchor-link" href="#4.-Selecci%C3%B3n-de-Caracter%C3%ADsticas-por-%C3%81rbol-de-Regresi%C3%B3n">¶</a></h2><div class="content-box">
+<p>Se realizó la selección de características utilizando un <b>árbol de regresión</b>, analizando la importancia de cada variable en la reducción del error del modelo. 
+    A partir de estas importancias se identificaron los predictores más relevantes para explicar la variable <b>Effort</b>.</p>
+</div>
+<div style="background: #f8f9fa; border-left: 4px solid #f39c12; padding: 15px; text-align: left; font-size: 1.05em; color: #2c3e50; margin-top: 10px; border-radius: 6px;">
+<b>Interpretación:</b> Las variables seleccionadas son aquellas que aportan mayor reducción de impureza dentro del árbol, es decir, las que más contribuyen a mejorar la capacidad predictiva del modelo.
+</div>
+<div style="text-align: center;">
+<img alt="Selección de características por árbol de regresión" src="imagen2.png" style="width: 80%; max-width: 600px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"/>
+<p><i>Figura: Importancia de variables según el árbol de regresión.</i></p>
 </div>
 </div>
 </div>
@@ -7960,65 +7984,93 @@ Comparativa con todas las características vs. solo las seleccionadas.
 </div>
 </div>
 <h2 id="6.-Resultados:-Comparaci%C3%B3n-de-M%C3%A9tricas">6. Resultados: Comparación de Métricas<a class="anchor-link" href="#6.-Resultados:-Comparaci%C3%B3n-de-M%C3%A9tricas">¶</a></h2><div class="content-box">
-<p>Se evaluaron los seis modelos (con todas las características y con el subconjunto seleccionado) sobre el conjunto de prueba. Las métricas utilizadas son <b>MSE</b> (Error Cuadrático Medio), <b>MAE</b> (Error Absoluto Medio) y <b>R²</b> (Coeficiente de Determinación).</p>
+<p>Se evaluaron los modelos integrando el <b>Enfoque A</b> (Todas las variables), 
+    <b>Enfoque B</b> (Mejores por Correlación) y <b>Enfoque C</b> (Mejores por Árboles). 
+    Las métricas se calcularon sobre los datos de prueba escalados.</p>
 </div>
-<table class="inference-table">
+<table class="inference-table" style="font-size: 0.85em;">
 <thead>
 <tr>
-<th>Modelo</th>
-<th>MSE (menor es mejor)</th>
-<th>MAE (menor es mejor)</th>
-<th>R² (mayor es mejor)</th>
+<th>Modelo y Selección</th>
+<th>RMSE</th>
+<th>MAE</th>
+<th>R²</th>
 <th>Diagnóstico</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="model-name">Árbol (todas)</td>
-<td>1656.68</td>
-<td>25.21</td>
-<td>0.8780</td>
-<td><span class="badge-red">Alto error / sobreajuste</span></td>
+<td class="model-name">Árbol (Todas)</td>
+<td>0.6773</td>
+<td>0.4892</td>
+<td>0.2395</td>
+<td><span class="badge-orange">Bajo rendimiento</span></td>
 </tr>
 <tr>
-<td class="model-name">Árbol (mejores)</td>
-<td>744.00</td>
-<td>19.89</td>
-<td>0.9452</td>
-<td><span class="badge-orange">Mejora significativa</span></td>
+<td class="model-name">Random Forest (Todas)</td>
+<td>0.5882</td>
+<td>0.4101</td>
+<td>0.4265</td>
+<td><span class="badge-blue">Buen desempeño</span></td>
 </tr>
 <tr>
-<td class="model-name">Random Forest (todas)</td>
-<td>1001.55</td>
-<td>17.10</td>
-<td>0.9263</td>
-<td><span class="badge-blue">Robusto, buen R²</span></td>
+<td class="model-name">Regresión Lineal (Todas)</td>
+<td>0.5949</td>
+<td>0.4187</td>
+<td>0.4134</td>
+<td><span class="badge-blue">Estable</span></td>
 </tr>
 <tr>
-<td class="model-name">Random Forest (mejores)</td>
-<td>945.91</td>
-<td>17.55</td>
-<td>0.9304</td>
-<td><span class="badge-blue">Similar a todas</span></td>
+<td class="model-name">Árbol (Mejores Corr)</td>
+<td>0.7605</td>
+<td>0.5752</td>
+<td>0.0413</td>
+<td><span class="badge-red">Subajuste</span></td>
 </tr>
 <tr>
-<td class="model-name">Regresión Lineal (todas)</td>
-<td><span style="font-weight:bold;color:#27ae60;">207.24</span></td>
-<td><span style="font-weight:bold;color:#27ae60;">8.58</span></td>
-<td><span style="font-weight:bold;color:#27ae60;">0.9847</span></td>
-<td><span class="badge-green"> Mejor modelo</span></td>
+<td class="model-name">Random Forest (Mejores Corr)</td>
+<td>0.6183</td>
+<td>0.4471</td>
+<td>0.3662</td>
+<td><span class="badge-blue">Aceptable</span></td>
 </tr>
 <tr>
-<td class="model-name">Regresión Lineal (mejores)</td>
-<td>216.39</td>
-<td>8.71</td>
-<td>0.9841</td>
-<td><span class="badge-green">Excelente, casi igual</span></td>
+<td class="model-name">Regresión Lineal (Mejores Corr)</td>
+<td><span style="font-weight:bold;color:#27ae60;">0.5633</span></td>
+<td><span style="font-weight:bold;color:#27ae60;">0.3723</span></td>
+<td><span style="font-weight:bold;color:#27ae60;">0.4740</span></td>
+<td><span class="badge-green">Mejor modelo</span></td>
+</tr>
+<tr>
+<td class="model-name">Árbol (Tree-Sel)</td>
+<td>0.8081</td>
+<td>0.5727</td>
+<td>-0.0826</td>
+<td><span class="badge-red">Subajuste severo</span></td>
+</tr>
+<tr>
+<td class="model-name">Random Forest (Tree-Sel)</td>
+<td>0.7763</td>
+<td>0.5638</td>
+<td>0.0009</td>
+<td><span class="badge-orange">Casi nulo poder predictivo</span></td>
+</tr>
+<tr>
+<td class="model-name">Regresión Lineal (Tree-Sel)</td>
+<td>0.6133</td>
+<td>0.4528</td>
+<td>0.3765</td>
+<td><span class="badge-blue">Estable</span></td>
 </tr>
 </tbody>
 </table>
-<div style="background: #f8f9fa; border-left: 4px solid #f39c12; padding: 15px; text-align: left; font-size: 1.05em; color: #2c3e50; margin-top: 25px; border-radius: 6px;">
-<b>Conclusión:</b> Los valores numéricos dependen de la ejecución real. En general, se espera que <b>Random Forest</b> supere a los demás modelos, y que la reducción de características (top features) pueda mejorar la generalización (menor MSE y MAE) o al menos mantener el rendimiento con menor complejidad.
+<div style="background: #f8f9fa; border-left: 4px solid #27ae60; padding: 15px; text-align: left; font-size: 1.05em; color: #2c3e50; margin-top: 25px; border-radius: 6px;">
+<b>Conclusión Final:</b> 
+    La <b>regresión lineal con selección por correlación</b> fue el modelo con mejor desempeño global, alcanzando el mayor R² (0.4740) y los menores errores (RMSE y MAE). 
+    <br/><br/>
+    En contraste, los <b>árboles de decisión</b> mostraron un comportamiento consistente de <b>subajuste</b>, especialmente en el enfoque con selección por árboles, donde incluso se obtuvo un R² negativo.
+    <br/><br/>
+    En general, los resultados sugieren que la relación entre variables es principalmente lineal y que la selección de variables por correlación mejora el rendimiento del modelo.
 </div>
 </div>
 </div>
